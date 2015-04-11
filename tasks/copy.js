@@ -9,6 +9,7 @@
     , materialize = require(toModule + 'materialize-css/package.json').files
     , jQuery = require(toModule + 'jquery/package.json').main
     , sglr = require(toModule + 'siglr/package.json').files
+    , _ = require(toModule + 'underscore/package.json').main
     , anIndex = 0
     , pathFrom
     , newFile;
@@ -38,6 +39,8 @@
       }
     }
 
+
+    fs.copySync(path.resolve(__dirname, toModule + 'underscore', _), toNewDir + '/js/underscore.js');
     fs.copySync(path.resolve(__dirname, toModule + 'jquery/', jQuery), toNewDir + '/' + jQuery);
     fs.copySync(path.resolve(__dirname, '../webrtc-adapter/', 'adapter.js'), toNewDir + '/js/adapter.js');
   });
