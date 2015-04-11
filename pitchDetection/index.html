@@ -22,25 +22,28 @@ div.vague { color: lightgrey; }
 <body>
 <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 <script type="text/javascript" src="js/raphael-min.js"></script>
-<script type="text/javascript" src="js/pitchdetect.js"></script>
+<!-- <script type="text/javascript" src="js/pitchdetect.js"></script> -->
+<script type="text/javascript" src="js/audio_context_monkeypatch.js"></script>
+<script type="text/javascript" src="js/pitchdetect_better.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 
 
-<button onclick="toggleLiveInput()">use live input</button>
+<button style="font-size: 3em" onclick="toggleLiveInput()">use live input</button>
 
+<div id="piano"></div>
 
 <div id="detector" class="vague">
 <div class="pitch"><span id="pitch">--</span>Hz</div>
-<div class="note"><span id="note">--</span></div>   
+<div class="note"><span id="note">--</span></div>
 <canvas id="output" width=300 height=42></canvas>
 <div id="detune"><span id="detune_amt">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
 </div>
 
 
+
+
 <canvas id="waveform" width="512" height="256"></canvas>
-<div id="piano">
-	
-</div>
 
 
 </body>
