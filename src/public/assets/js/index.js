@@ -20,7 +20,7 @@ window.time = 100;
     , ROOM_URL_ID = Number(window.location.hash.replace('#', ''))
     , ROOM_URL = BASE_URL + '/room.html#' + ROOM_URL_ID
     , ROOM_ROUTE = 'room.html'
-    , WS_URL = 'ws://localhost:9876'
+    , WS_URL = 'ws://teachrtc.mkvd.net:9876'
     , userdataReadyEvent = new window.CustomEvent('userdata:ready')
     , section
     , log = function log() {
