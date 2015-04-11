@@ -13,8 +13,11 @@ window.onload = function () {
         // console.log("note", pitchDetector.note);
     if (pitchDetector.pitch && pitchDetector.note ) {
 
+      // tick(pitch, note)()
 
       tick_throttle(pitchDetector.pitch,  pitchDetector.noteString)
+
+
                   // tick_throttle(pitchDetector.pitch,  pitchDetector.noteString)
 
       // document.getElementById('pitch').innerHTML = pitchDetector.pitch;
@@ -42,26 +45,35 @@ $( document ).ready(function() {
 
 var renderView = function(note, section) {
 	//To check that doesn't exist #
-  if(note.indexOf("#")==-1){
+  // console.log("note", note, "section", section)
 
-    if (section) {
+  if (section == 4) {
 
-      $("#Layer_1 rect").css("fill","#FFFFFF");
-      $("#Layer_2 rect").css("fill","#000000");
-      $("#Layer_1 #range"+section+" #"+note).css("fill","#FF0000");
 
+
+    if(note.indexOf("#")==-1){
+
+      if (section) {
+
+        $("#Layer_1 rect").css("fill","#FFFFFF");
+        $("#Layer_2 rect").css("fill","#000000");
+        $("#Layer_1 #range"+section+" #"+note).css("fill","#FF0000");
+
+      }
+    } else {
+      console.log("note", note, "section", section)
+
+    	note=note.replace(/[^a-zA-Z0-9]/g,'');
+
+      if (section) {
+
+    	  $("#Layer_1 rect").css("fill","#FFFFFF");
+        $("#Layer_2 rect").css("fill","#000000");
+        $("#Layer_2 #range"+section+" #"+note).css("fill","#00FF00");
+
+      }
     }
-  } else{
 
-  	note=note.replace(/[^a-zA-Z0-9]/g,'');
-
-    if (section) {
-
-  	  $("#Layer_1 rect").css("fill","#FFFFFF");
-      $("#Layer_2 rect").css("fill","#000000");
-      $("#Layer_2 #range"+section+" #"+note).css("fill","#00FF00");
-
-    }
   }
 }
 
@@ -87,10 +99,12 @@ var tick = function(pitch, note) {
 
   return function() {
     // console.log(pitch)
+
+
     if(pitch!=11025){
 
-            console.log(pitch)
-                  console.log(note)
+            // console.log(pitch)
+                  // console.log(note)
 
   		pitch=Number(pitch).toFixed(3);
 
@@ -140,8 +154,8 @@ var tick = function(pitch, note) {
       renderView(note, section)
 
   	} else {
-  	   $("#Layer_1 rect").css("fill","#FFFFFF");
-  	    $("#Layer_2 rect").css("fill","#000000");
+  	  //  $("#Layer_1 rect").css("fill","#FFFFFF");
+  	  //   $("#Layer_2 rect").css("fill","#000000");
     }
   }
 
@@ -150,7 +164,7 @@ var tick = function(pitch, note) {
 
 // window.time = 100
 // window.time = 120
-window.time = 120
+window.time = 30
 
 var tick_throttle = _.throttle(function(pitch, note){
   tick(pitch, note)()
