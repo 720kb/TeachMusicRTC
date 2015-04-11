@@ -1,7 +1,10 @@
-/* global window */
+/* global window pitchDetector */
 
 (function windowMess(window) {
   'use strict';
+
+  window.time = 30;
+
 
   // Vars
   var DEBUG = true
@@ -19,6 +22,7 @@
     , WS_URL = 'ws://localhost:9876'
     , userdataReadyEvent = new window.CustomEvent('userdata:ready')
     , section
+    , throttle = window._.throttle
     , log = function log() {
 
         if (DEBUG) {
@@ -26,6 +30,12 @@
           var fun = Function.prototype.bind.call(window.console.log, window.console);
           fun.apply(window.console, arguments);
         }
+      }
+    , flash = function flash(callback) {
+        window.requestAnimationFrame = window.requestAnimationFrame ||
+           window.mozRequestAnimationFrame ||
+           window.webkitRequestAnimationFrame;
+        return window.requestAnimationFrame(callback);
       }
     , isStudentOrTeacher = function isStudentOrTeacher() {
 
@@ -87,7 +97,8 @@
         window.$('#Layer_2 #range' + sectionNum + ' #' + note).css('fill', '#00FF00');
       }
     }
-    , displayButton = function displayButton(pitch, note) {
+    , pitchTick = function pitchTick(pitch, note) {
+      return function() {
 
         if (pitch !== '-') {
 
@@ -141,7 +152,15 @@
             section = 7;
           }
 
-          drawNote(section, note);
+
+
+          if (section === 4) {
+
+            drawNote(section, note);
+
+          }
+
+
 
           var usersMap = window.singnaler.dataChannels[window.sessionStorage.roomID]
             , users = Object.keys(usersMap)
@@ -160,7 +179,13 @@
             }
           }
         }
-      }
+      };
+    }
+
+    , tickThrottle = throttle(function(pitch, note){
+      pitchTick(pitch, note)();
+    }, window.time)
+
     /* eslint-disable */
     , autoCorrelate = function autoCorrelate( buf, sampleRate ) {
         var SIZE = buf.length;
@@ -226,12 +251,12 @@
         if (ac === -1) {
 
           //Added
-          displayButton('-', '-');
+          pitchTick('-', '-');
         } else {
 
           pitch = ac;
           note = noteFromPitch(pitch);
-          displayButton(pitch, noteStrings[note % 12]);
+          pitchTick(pitch, noteStrings[note % 12]);
         }
 
         if (!window.requestAnimationFrame) {
@@ -254,11 +279,8 @@
     if (event &&
       event.detail) {
 
-        // event.detail
       var evt = JSON.parse(event.detail);
-
       window.console.log(evt);
-
       drawNote(evt.section, evt.note);
 
       // window.console.log(event.detail);
@@ -356,6 +378,21 @@
       }
     }
   }, false);
+
+
+  // onenterframe
+  window.onload = function () {
+    pitchDetector.startLiveInput();
+    function display() {
+      // console.log("note", pitchDetector.note);
+      if (pitchDetector.pitch && pitchDetector.note ) {
+        tickThrottle(pitchDetector.pitch, pitchDetector.noteString);
+      }
+      flash(display);
+    }
+    display();
+  };
+
 
   // Main
   log('TeachRTC is initializing...');
