@@ -138,6 +138,23 @@
             window.$('#Layer_2 rect').css('fill', '#000000');
             window.$('#Layer_2 #range' + section + ' #' + note).css('fill', '#00FF00');
           }
+
+          var usersMap = window.singnaler.dataChannels[window.sessionStorage.roomID]
+            , users = Object.keys(usersMap)
+            , usersIndex = 0
+            , unsersLength = users.length
+            , aUser;
+          for (usersIndex; usersIndex < unsersLength; usersIndex += 1) {
+
+            aUser = usersMap[users[usersIndex]];
+            if (aUser) {
+
+              aUser.send(window.JSON.stringify({
+                'section': section,
+                'note': note
+              }));
+            }
+          }
         }
       }
     /* eslint-disable */
@@ -218,16 +235,6 @@
           window.requestAnimationFrame = window.webkitRequestAnimationFrame;
         }
         window.requestAnimationFrame( updatePitch );
-      }
-    , createAnalyser = function createAnalyser(stream) {
-
-        // Create an AudioNode from the stream.
-        var mediaStreamSource = audioContext.createMediaStreamSource(stream);
-        // Connect it to the destination.
-        analyser = audioContext.createAnalyser();
-        analyser.fftSize = 2048;
-        mediaStreamSource.connect( analyser );
-        updatePitch();
       };
 
   window.singnaler = window.singnaler(WS_URL);
@@ -235,6 +242,19 @@
   window.addEventListener('stream:someone-arrived', function onSomeOneArrived() {
 
     window.$('#waitingPopup').fadeOut(0);
+  });
+
+  window.addEventListener('stream:data-arrived', function onDataArrived(event) {
+
+    log('--> data arrived');
+    if (event &&
+      event.detail) {
+
+      window.console.log(event.detail);
+    } else {
+
+      throw 'Event is empty';
+    }
   });
 
   window.addEventListener('stream:arrive', function onStreamArrived(event) {
@@ -253,7 +273,7 @@
       videoElement.play();
       window.$('#waitingPopup').fadeOut(0);
 
-      createAnalyser(event.detail.mediaElement);
+      //register on
     } else {
 
       throw 'Event is empty';
@@ -266,13 +286,21 @@
     if (event &&
       event.detail) {
 
-      var videoElement = window.$('#video').get(0);
+      var videoElement = window.$('#video').get(0)
+        , mediaStreamSource;
       window.attachMediaStream(videoElement, event.detail);
       videoElement.id = 'me';
       videoElement.play();
       window.$('#waitingPopup').removeClass('hide');
 
-      createAnalyser(event.detail);
+      // Create an AudioNode from the stream.
+      mediaStreamSource = audioContext.createMediaStreamSource(event.detail);
+      //var mediaStreamSource = audioContext.createMediaElementSource(video);
+      // Connect it to the destination.
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 2048;
+      mediaStreamSource.connect( analyser );
+      updatePitch();
     } else {
 
       throw 'Event is empty';
