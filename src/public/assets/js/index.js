@@ -5,6 +5,12 @@
 
   // Vars
   var DEBUG = true
+    , audioContext = new window.AudioContext()
+    , MIN_SAMPLES = 0  // will be initialized when AudioContext is created.
+    , analyser
+    , buflen = 1024
+    , buf = new Float32Array( buflen )
+    , noteStrings = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
     , BASE_URL = window.location.protocol + '//' + window.location.host
     , FULL_URL = window.location.href
     , ROOM_URL_ID = Number(window.location.hash.replace('#', ''))
@@ -12,6 +18,7 @@
     , ROOM_ROUTE = 'room.html'
     , WS_URL = 'ws://localhost:9876'
     , userdataReadyEvent = new window.CustomEvent('userdata:ready')
+    , section
     , log = function log() {
 
         if (DEBUG) {
@@ -58,6 +65,169 @@
           window.sessionStorage.token = token;
           userdataIsReady();
         });
+      }
+    , noteFromPitch = function noteFromPitch( frequency ) {
+
+        var noteNum = 12 * (Math.log(frequency / 440 ) / Math.log(2));
+        return Math.round( noteNum ) + 69;
+      }
+    , displayButton = function displayButton(pitch, note) {
+
+        if (pitch !== '-') {
+
+          pitch = Number(pitch).toFixed(3);
+          //According to the Hz
+          if (pitch >= 27.500 && pitch < 32.703) {
+
+            //Group A0
+            section = 0;
+          }
+
+          if (pitch >= 32.703 && pitch < 55.000) {
+
+            //Group A1
+            section = 1;
+          }
+
+          if (pitch >= 55.000 && pitch < 110.000) {
+
+            //Group A2
+            section = 2;
+          }
+
+          if (pitch >= 110.000 && pitch < 220.000) {
+
+            //Group A3
+            section = 3;
+          }
+
+          if (pitch >= 220.000 && pitch < 440.000) {
+
+            //Group A4
+            section = 4;
+          }
+
+          if (pitch >= 440.000 && pitch < 880.000) {
+
+            //Group A5
+            section = 5;
+          }
+
+          if (pitch >= 880.000 && pitch < 1760.000) {
+
+            //Group A56
+            section = 6;
+          }
+
+          if (pitch >= 1760.000 && pitch < 3520.000) {
+
+            //Group A7
+            section = 7;
+          }
+
+          //To check that doesn't exist #
+          if (note.indexOf('#') === -1) {
+
+            window.$('#Layer_1 rect').css('fill', '#FFFFFF');
+            window.$('#Layer_2 rect').css('fill', '#000000');
+            window.$('#Layer_1 #range' + section + ' #' + note).css('fill', '#FF0000');
+          } else {
+
+            note = note.replace(/[^a-zA-Z0-9]/g, '');
+            window.$('#Layer_1 rect').css('fill', '#FFFFFF');
+            window.$('#Layer_2 rect').css('fill', '#000000');
+            window.$('#Layer_2 #range' + section + ' #' + note).css('fill', '#00FF00');
+          }
+        }
+      }
+    /* eslint-disable */
+    , autoCorrelate = function autoCorrelate( buf, sampleRate ) {
+        var SIZE = buf.length;
+        var MAX_SAMPLES = Math.floor(SIZE/2);
+        var best_offset = -1;
+        var best_correlation = 0;
+        var rms = 0;
+        var foundGoodCorrelation = false;
+        var correlations = new Array(MAX_SAMPLES);
+
+        for (var i=0;i<SIZE;i++) {
+          var val = buf[i];
+          rms += val*val;
+        }
+        rms = Math.sqrt(rms/SIZE);
+        if (rms<0.01) // not enough signal
+          return -1;
+
+        var lastCorrelation=1;
+        for (var offset = MIN_SAMPLES; offset < MAX_SAMPLES; offset++) {
+          var correlation = 0;
+
+          for (var i=0; i<MAX_SAMPLES; i++) {
+            correlation += Math.abs((buf[i])-(buf[i+offset]));
+          }
+          correlation = 1 - (correlation/MAX_SAMPLES);
+          correlations[offset] = correlation; // store it, for the tweaking we need to do below.
+          if ((correlation>0.9) && (correlation > lastCorrelation)) {
+            foundGoodCorrelation = true;
+            if (correlation > best_correlation) {
+              best_correlation = correlation;
+              best_offset = offset;
+            }
+          } else if (foundGoodCorrelation) {
+            // short-circuit - we found a good correlation, then a bad one, so we'd just be seeing copies from here.
+            // Now we need to tweak the offset - by interpolating between the values to the left and right of the
+            // best offset, and shifting it a bit.  This is complex, and HACKY in this code (happy to take PRs!) -
+            // we need to do a curve fit on correlations[] around best_offset in order to better determine precise
+            // (anti-aliased) offset.
+
+            // we know best_offset >=1,
+            // since foundGoodCorrelation cannot go to true until the second pass (offset=1), and
+            // we can't drop into this clause until the following pass (else if).
+            var shift = (correlations[best_offset+1] - correlations[best_offset-1])/correlations[best_offset];
+            return sampleRate/(best_offset+(8*shift));
+          }
+          lastCorrelation = correlation;
+        }
+        if (best_correlation > 0.01) {
+          // console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")")
+          return sampleRate/best_offset;
+        }
+        return -1;
+        //  var best_frequency = sampleRate/best_offset;
+      }
+    /* eslint-enable */
+    , updatePitch = function updatePitch() {
+        var pitch
+         , note
+         , ac;
+        analyser.getFloatTimeDomainData( buf );
+        ac = autoCorrelate( buf, audioContext.sampleRate );
+        if (ac === -1) {
+
+          //Added
+          displayButton('-', '-');
+        } else {
+
+          pitch = ac;
+          note = noteFromPitch(pitch);
+          displayButton(pitch, noteStrings[note % 12]);
+        }
+
+        if (!window.requestAnimationFrame) {
+
+          window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+        }
+        window.requestAnimationFrame( updatePitch );
+      }
+    , createAnalyser = function createAnalyser(stream) {
+
+        // Create an AudioNode from the stream.
+        var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+        // Connect it to the destination.
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 2048;
+        mediaStreamSource.connect( analyser );
+        updatePitch();
       };
 
   window.singnaler = window.singnaler(WS_URL);
@@ -83,20 +253,7 @@
       videoElement.play();
       window.$('#waitingPopup').fadeOut(0);
 
-
-      // audio context
-
-      // TODO
-
-      // var context = new AudioContext();
-      // var source = context.createMediaElementSource(video);
-      //
-      // var analyser = context.createAnalyser();
-      // analyser.fftSize = 2048;
-      // mediaStreamSource.connect( analyser );
-      // updatePitch();
-
-
+      createAnalyser(event.detail.mediaElement);
     } else {
 
       throw 'Event is empty';
@@ -114,6 +271,8 @@
       videoElement.id = 'me';
       videoElement.play();
       window.$('#waitingPopup').removeClass('hide');
+
+      createAnalyser(event.detail);
     } else {
 
       throw 'Event is empty';
@@ -171,80 +330,8 @@
     userdataIsReady();
   }
 
-
-
-  // UPDATE PITCH
-
-  // pass audioContext (context)
-  // create wavecanvas -> rename note antani ()
-
-
-  // TODO - uncomment
-  //
-  // function updatePitch( time ) {
-  //   var cycles = new Array;
-  //   analyser.getFloatTimeDomainData( buf );
-  //   var ac = autoCorrelate( buf, audioContext.sampleRate );
-  //
-  //   // TODO: Paint confidence meter on canvasElem here.
-  //
-  //   // if (DEBUGCANVAS) {  // This draws the current waveform, useful for debugging
-  //   //   waveCanvas.clearRect(0,0,512,256);
-  //   //   waveCanvas.strokeStyle = "red";
-  //   //   waveCanvas.beginPath();
-  //   //   waveCanvas.moveTo(0,0);
-  //   //   waveCanvas.lineTo(0,256);
-  //   //   waveCanvas.moveTo(128,0);
-  //   //   waveCanvas.lineTo(128,256);
-  //   //   waveCanvas.moveTo(256,0);
-  //   //   waveCanvas.lineTo(256,256);
-  //   //   waveCanvas.moveTo(384,0);
-  //   //   waveCanvas.lineTo(384,256);
-  //   //   waveCanvas.moveTo(512,0);
-  //   //   waveCanvas.lineTo(512,256);
-  //   //   waveCanvas.stroke();
-  //   //   waveCanvas.strokeStyle = "black";
-  //   //   waveCanvas.beginPath();
-  //   //   waveCanvas.moveTo(0,buf[0]);
-  //   //   for (var i=1;i<512;i++) {
-  //   //     waveCanvas.lineTo(i,128+(buf[i]*128));
-  //   //   }
-  //   //   waveCanvas.stroke();
-  //   // }
-  //
-  //    if (ac == -1) {
-  //      detectorElem.className = "vague";
-  //      pitchElem.innerText = "--";
-  //     noteElem.innerText = "-";
-  //     detuneElem.className = "";
-  //     detuneAmount.innerText = "--";
-  //    } else {
-  //      detectorElem.className = "confident";
-  //      pitch = ac;
-  //      pitchElem.innerText = Math.round( pitch ) ;
-  //      var note =  noteFromPitch( pitch );
-  //     noteElem.innerHTML = noteStrings[note%12];
-  //     var detune = centsOffFromPitch( pitch, note );
-  //     if (detune == 0 ) {
-  //       detuneElem.className = "";
-  //       detuneAmount.innerHTML = "--";
-  //     } else {
-  //       if (detune < 0)
-  //         detuneElem.className = "flat";
-  //       else
-  //         detuneElem.className = "sharp";
-  //       detuneAmount.innerHTML = Math.abs( detune );
-  //     }
-  //   }
-  //
-  //   if (!window.requestAnimationFrame)
-  //     window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-  //   rafID = window.requestAnimationFrame( updatePitch );
-  // }
-
-
   // Binding
-
+  window.$('#piano').load('piano.html');
   window.$('.url-share-holder').text(ROOM_URL);
   window.$('#closePopup').on('click', function onPopUpClosing() {
 
