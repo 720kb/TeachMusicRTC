@@ -1,4 +1,6 @@
-/* global window */
+/* global window console _ */
+
+window.time = 100;
 
 (function windowMess(window) {
   'use strict';
