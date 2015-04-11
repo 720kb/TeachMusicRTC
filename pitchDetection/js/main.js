@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 
 
@@ -36,13 +37,21 @@ window.onload = function () {
 
 
 
+=======
+>>>>>>> Stashed changes
 var section;
+var noteDetected;
 
 $( document ).ready(function() {
-   $("#piano").load("piano.html")
+   $("#piano").load("piano.html");
+   
+   $( "#activePitch").off("click").on( "click", function() {
+	  activePitchDetection();
+	});
 });
 
 
+<<<<<<< Updated upstream
 var renderView = function(note, section) {
 	//To check that doesn't exist #
   // console.log("note", note, "section", section)
@@ -75,28 +84,28 @@ var renderView = function(note, section) {
     }
 
   }
+=======
+function flash(callback) {
+        window.requestAnimationFrame = window.requestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame;
+        return window.requestAnimationFrame(callback);
+>>>>>>> Stashed changes
 }
+      
+function activePitchDetection() {
+        pitchDetector.startLiveInput();
+        display();
+};
 
-// var renderViewOld = function(note, section) {
-// 	//To check that doesn't exist #
-//   if(note.indexOf("#")==-1){
-//
-//     $("#Layer_1 rect").css("fill","#FFFFFF");
-//     $("#Layer_2 rect").css("fill","#000000");
-//     $("#Layer_1 #range"+section+" #"+note).css("fill","#FF0000");
-//   }
-//   else{
-//
-//   	  note=note.replace(/[^a-zA-Z0-9]/g,'');
-//   	  $("#Layer_1 rect").css("fill","#FFFFFF");
-//     $("#Layer_2 rect").css("fill","#000000");
-//     $("#Layer_2 #range"+section+" #"+note).css("fill","#00FF00");
-//   }
-// }
+function display() {
+          if (pitchDetector.pitch) {            
+            displayPitch(pitchDetector.pitch , pitchDetector.noteString);
+          }
+          flash(display);
+};
 
-
-var tick = function(pitch, note) {
-
+<<<<<<< Updated upstream
   return function() {
     // console.log(pitch)
 
@@ -105,8 +114,12 @@ var tick = function(pitch, note) {
 
             // console.log(pitch)
                   // console.log(note)
+=======
 
-  		pitch=Number(pitch).toFixed(3);
+function displayPitch(pitch, note) {
+>>>>>>> Stashed changes
+
+  		pitch=Number(pitch);
 
   		//According to the Hz
   		if(pitch>=27.500 && pitch<32.703){
@@ -146,6 +159,7 @@ var tick = function(pitch, note) {
   			//Group A7
   			section=7;
   		}
+<<<<<<< Updated upstream
 
 
 
@@ -169,20 +183,111 @@ window.time = 30
 var tick_throttle = _.throttle(function(pitch, note){
   tick(pitch, note)()
 }, window.time)
+=======
+  		
 
-
-
-var displayButton = function(pitch, note){
-  // _.debounce(tick(pitch, note), 200)
-
-  // console.log("..")
-
-  // var tick_throttle = _.debounce(function(){
-
-
-
-
-  tick_throttle(pitch, note)
-
-  // tick(pitch, note)()
+		$("#Layer_1 rect").css("fill","#FFFFFF");
+		$("#Layer_2 rect").css("fill","#000000");
+		   
+  		if(note.indexOf("#")==-1){
+           $("#Layer_1 #range"+section+" #"+note).css("fill","#FF0000");
+		}
+		else{
+			note=note.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+			$("#Layer_2 #range"+section+" #"+note).css("fill","#00FF00");
+		}
+		
+		
+		
+		
+		
 }
+
+
+/*
+var firstSectionValuesCollection=new Array();
+var locked=false;
+var timer;
+var count=0;
+>>>>>>> Stashed changes
+
+function timerCleaner(){
+	if(locked==false){
+	   locked=true;
+	   timer = setInterval(control, 10);
+	}
+}
+
+function control(){
+	if(count>10){
+		 
+		 $("#Layer_1 rect").css("fill","#FFFFFF");
+		$("#Layer_2 rect").css("fill","#000000");
+		$("#"+layer+" #range"+firstSectionValuesCollection[0]+" #"+noteDetected).css("fill","#00FF00");
+		 
+		 firstSectionValuesCollection=[];
+		 clearInterval(timer);
+		 locked=false;
+		 count=0;
+	}
+	count++;
+}
+*/
+
+/*
+var layer;
+var notesCollection=new Array();
+var sectionsCollection=new Array();
+var myTimer;
+var blocked=false;
+var counter=0;
+
+function activateTimer(){
+	if(blocked==false){
+	   blocked=true;
+	   myTimer = setInterval(controlValue, 1);
+	}
+}
+
+var sectionResulted;
+var noteResulted;
+
+function controlValue(){
+	if(counter>10){
+		 sectionResulted=mostFrequent(sectionsCollection);
+		 noteResulted=mostFrequent(notesCollection);
+		 //console.log("layer "+layer +" - section: "+sectionResulted+ " - noteResulted "+noteResulted);
+		 
+		 $("#Layer_1 rect").css("fill","#FFFFFF");
+		 $("#Layer_2 rect").css("fill","#000000");
+		 $("#"+layer+" #range"+sectionResulted+" #"+noteResulted).css("fill","#00FF00");
+		 
+		 notesCollection=[];
+		 sectionsCollection=[];
+		 clearInterval(myTimer);
+		 blocked=false;
+		 counter=0;
+	}
+	else{
+		
+	}
+	counter++;
+}
+
+
+
+function mostFrequent(arr) {
+    var uniqs = {};
+
+    for(var i = 0; i < arr.length; i++) {
+        uniqs[arr[i]] = (uniqs[arr[i]] || 0) + 1;
+    }
+
+    var max = { val: arr[0], count: 1 };
+    for(var u in uniqs) {
+        if(max.count < uniqs[u]) { max = { val: u, count: uniqs[u] }; }
+    }
+
+    return max.val;
+}*/
+
