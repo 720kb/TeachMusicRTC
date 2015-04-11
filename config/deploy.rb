@@ -1,7 +1,7 @@
 # configs
 
-username = "makevoid" # or organization usually
-app_name = "TeachRTC"
+username = "720kb" # or organization usually
+app_name = "TeachMusicRTC"
 # branch   = "test_ui"  # master is used if nil
 branch   = "master"  # master is used if nil
 
@@ -19,9 +19,10 @@ require 'mina/git'
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :domain,      'makevoid.com'
-set :deploy_to,   "/www/#{app_name}"
-# set :repository,  "git://github.com/#{username}/#{app_name}" # public
-set :repository,  "git@github.com:#{username}/#{app_name}"     # private
+# set :deploy_to,   "/www/#{app_name}"
+set :deploy_to,   "/www/TeachRTC"
+set :repository,  "git://github.com/#{username}/#{app_name}" # public
+# set :repository,  "git@github.com:#{username}/#{app_name}"     # private
 set :branch,      branch || "master"
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
