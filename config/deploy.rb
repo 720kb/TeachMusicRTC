@@ -2,7 +2,8 @@
 
 username = "makevoid" # or organization usually
 app_name = "TeachRTC"
-branch   = "test_ui"  # master is used if nil
+# branch   = "test_ui"  # master is used if nil
+branch   = "master"  # master is used if nil
 
 # deploy
 

@@ -27,7 +27,7 @@
     if (typeof PhusionPassenger !== 'undefined') {// Requires Phusion Passenger >= 4.0.52!
       server.connection({'port': '/passenger'});
     } else {
-      server.connection({'port': 3000, 'host': 'localhost'});
+      server.connection(conf);
     }
     // server.connection(conf); // original implementation
 
