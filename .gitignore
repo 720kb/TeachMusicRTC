@@ -1,0 +1,5 @@
+node_modules/
+npm-debug.log
+public/vendor/
+dump.rdb
+.DS_Store

@@ -1,0 +1,3 @@
+[submodule "webrtc-adapter"]
+	path = webrtc-adapter
+	url = https://github.com/webrtc/adapter.git
