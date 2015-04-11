@@ -14,7 +14,7 @@ window.onload = function () {
     if (pitchDetector.pitch && pitchDetector.note ) {
 
 
-            tick_throttle(pitchDetector.pitch,  pitchDetector.noteString)
+      tick_throttle(pitchDetector.pitch,  pitchDetector.noteString)
                   // tick_throttle(pitchDetector.pitch,  pitchDetector.noteString)
 
       // document.getElementById('pitch').innerHTML = pitchDetector.pitch;
@@ -22,8 +22,8 @@ window.onload = function () {
       // document.getElementById('note-string').innerHTML = pitchDetector.noteString;
     } else {
 
-              	  $("#Layer_1 rect").css("fill","#FFFFFF");
-                  $("#Layer_2 rect").css("fill","#000000");
+              	  // $("#Layer_1 rect").css("fill","#FFFFFF");
+                  // $("#Layer_2 rect").css("fill","#000000");
     }
     flash(display);
   };
@@ -50,10 +50,6 @@ var renderView = function(note, section) {
       $("#Layer_2 rect").css("fill","#000000");
       $("#Layer_1 #range"+section+" #"+note).css("fill","#FF0000");
 
-    } else {
-
-        	  $("#Layer_1 rect").css("fill","#FFFFFF");
-            $("#Layer_2 rect").css("fill","#000000");
     }
   } else{
 
@@ -65,10 +61,6 @@ var renderView = function(note, section) {
       $("#Layer_2 rect").css("fill","#000000");
       $("#Layer_2 #range"+section+" #"+note).css("fill","#00FF00");
 
-    } else {
-
-        	  $("#Layer_1 rect").css("fill","#FFFFFF");
-            $("#Layer_2 rect").css("fill","#000000");
     }
   }
 }
@@ -99,7 +91,7 @@ var tick = function(pitch, note) {
 
             console.log(pitch)
                   console.log(note)
-                  
+
   		pitch=Number(pitch).toFixed(3);
 
   		//According to the Hz
