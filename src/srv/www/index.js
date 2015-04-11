@@ -21,7 +21,7 @@
 
   server.views({'engines': {'html': require('handlebars')}, 'path': publicFolder});
 
-  module.exports = function exporting() {
+  module.exports = function exporting(conf) {
     // TODO - pass the right port (conf argument - see below)
     //
     if (typeof PhusionPassenger !== 'undefined') {// Requires Phusion Passenger >= 4.0.52!
