@@ -3,3 +3,4 @@ npm-debug.log
 public/vendor/
 dump.rdb
 .DS_Store
+src/public/vendor/

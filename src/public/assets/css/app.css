@@ -1,0 +1,55 @@
+.top {
+  width:100%;
+  margin:0 auto;
+  float:none;
+  height:0;
+}
+.top.top100 {
+  min-height:100px;
+}
+.top.top50 {
+  min-height:50px;
+}
+.top.top10 {
+  min-height:10px;
+}
+.centered {
+  float:none;
+  margin: 0 auto;
+}
+.ellips {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-indent:-20px;
+}
+.popup {
+  max-width:350px;
+  width:auto;
+  padding:10px 15px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius:5px;
+  float:none;
+  left:0;
+  right:0;
+  margin: 0 auto;
+}
+.video {
+  position: fixed;
+  z-index: -1;
+  right: 0;
+  bottom: 0;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+}
+.video-pitch {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  width:100%;
+  min-height: 100px;
+}
