@@ -8,6 +8,14 @@
 
     server.route({
       'method': 'GET',
+      'path': '/room.html',
+      'handler': function (request, reply) {
+        reply.view('room');
+      }
+    });
+
+    server.route({
+      'method': 'GET',
       'path': '/{param*}',
       'handler': {
         'directory': {

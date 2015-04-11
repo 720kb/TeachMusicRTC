@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/makevoid/TeachRTC",
   "dependencies": {
+    "handlebars": "^3.0.1",
     "hapi": "^8.4.0",
     "jquery": "^2.1.3",
     "materialize-css": "^0.96.1",
