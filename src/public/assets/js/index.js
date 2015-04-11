@@ -71,6 +71,22 @@
         var noteNum = 12 * (Math.log(frequency / 440 ) / Math.log(2));
         return Math.round( noteNum ) + 69;
       }
+    , drawNote = function drawNote(sectionNum, note) {
+
+      //To check that doesn't exist #
+      if (note.indexOf('#') === -1) {
+
+        window.$('#Layer_1 rect').css('fill', '#FFFFFF');
+        window.$('#Layer_2 rect').css('fill', '#000000');
+        window.$('#Layer_1 #range' + sectionNum + ' #' + note).css('fill', '#FF0000');
+      } else {
+
+        note = note.replace(/[^a-zA-Z0-9]/g, '');
+        window.$('#Layer_1 rect').css('fill', '#FFFFFF');
+        window.$('#Layer_2 rect').css('fill', '#000000');
+        window.$('#Layer_2 #range' + sectionNum + ' #' + note).css('fill', '#00FF00');
+      }
+    }
     , displayButton = function displayButton(pitch, note) {
 
         if (pitch !== '-') {
@@ -125,19 +141,7 @@
             section = 7;
           }
 
-          //To check that doesn't exist #
-          if (note.indexOf('#') === -1) {
-
-            window.$('#Layer_1 rect').css('fill', '#FFFFFF');
-            window.$('#Layer_2 rect').css('fill', '#000000');
-            window.$('#Layer_1 #range' + section + ' #' + note).css('fill', '#FF0000');
-          } else {
-
-            note = note.replace(/[^a-zA-Z0-9]/g, '');
-            window.$('#Layer_1 rect').css('fill', '#FFFFFF');
-            window.$('#Layer_2 rect').css('fill', '#000000');
-            window.$('#Layer_2 #range' + section + ' #' + note).css('fill', '#00FF00');
-          }
+          drawNote(section, note);
 
           var usersMap = window.singnaler.dataChannels[window.sessionStorage.roomID]
             , users = Object.keys(usersMap)
@@ -250,7 +254,14 @@
     if (event &&
       event.detail) {
 
-      window.console.log(event.detail);
+        // event.detail
+      var evt = JSON.parse(event.detail);
+
+      window.console.log(evt);
+
+      drawNote(evt.section, evt.note);
+
+      // window.console.log(event.detail);
     } else {
 
       throw 'Event is empty';
