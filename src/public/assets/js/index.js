@@ -1,6 +1,6 @@
 /* global window console _ */
 
-console.log("init underscore (remove me)", _)
+console.log('init underscore (remove me)', _);
 
 window.time = 100;
 
