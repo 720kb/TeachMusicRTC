@@ -143,12 +143,12 @@
 
           drawNote(section, note);
 
-          var usersMap = window.singnaler.dataChannels[window.sessionStorage.roomID]
+          var usersMap = window.singnaler.dataChannels()[window.sessionStorage.roomID]
             , users = Object.keys(usersMap)
             , usersIndex = 0
             , unsersLength = users.length
             , aUser;
-          for (usersIndex; usersIndex < unsersLength; usersIndex += 1) {
+          for (; usersIndex < unsersLength; usersIndex += 1) {
 
             aUser = usersMap[users[usersIndex]];
             if (aUser) {
