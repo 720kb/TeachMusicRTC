@@ -1,46 +1,8 @@
-<<<<<<< Updated upstream
-
-
-
-function flash(callback) {
-  window.requestAnimationFrame = window.requestAnimationFrame ||
-     window.mozRequestAnimationFrame ||
-     window.webkitRequestAnimationFrame;
-  return window.requestAnimationFrame(callback);
-}
-window.onload = function () {
-  pitchDetector.startLiveInput();
-  function display() {
-        // console.log("note", pitchDetector.note);
-    if (pitchDetector.pitch && pitchDetector.note ) {
-
-      // tick(pitch, note)()
-
-      tick_throttle(pitchDetector.pitch,  pitchDetector.noteString)
-
-
-                  // tick_throttle(pitchDetector.pitch,  pitchDetector.noteString)
-
-      // document.getElementById('pitch').innerHTML = pitchDetector.pitch;
-      // document.getElementById('note').innerHTML = pitchDetector.note;
-      // document.getElementById('note-string').innerHTML = pitchDetector.noteString;
-    } else {
-
-              	  // $("#Layer_1 rect").css("fill","#FFFFFF");
-                  // $("#Layer_2 rect").css("fill","#000000");
-    }
-    flash(display);
-  };
-  display();
-};
-
-
-
-
-=======
->>>>>>> Stashed changes
 var section;
 var noteDetected;
+
+var audioContext = null;
+var meter = null;
 
 $( document ).ready(function() {
    $("#piano").load("piano.html");
@@ -51,73 +13,58 @@ $( document ).ready(function() {
 });
 
 
-<<<<<<< Updated upstream
-var renderView = function(note, section) {
-	//To check that doesn't exist #
-  // console.log("note", note, "section", section)
-
-  if (section == 4) {
-
-
-
-    if(note.indexOf("#")==-1){
-
-      if (section) {
-
-        $("#Layer_1 rect").css("fill","#FFFFFF");
-        $("#Layer_2 rect").css("fill","#000000");
-        $("#Layer_1 #range"+section+" #"+note).css("fill","#FF0000");
-
-      }
-    } else {
-      console.log("note", note, "section", section)
-
-    	note=note.replace(/[^a-zA-Z0-9]/g,'');
-
-      if (section) {
-
-    	  $("#Layer_1 rect").css("fill","#FFFFFF");
-        $("#Layer_2 rect").css("fill","#000000");
-        $("#Layer_2 #range"+section+" #"+note).css("fill","#00FF00");
-
-      }
-    }
-
-  }
-=======
 function flash(callback) {
         window.requestAnimationFrame = window.requestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame;
         return window.requestAnimationFrame(callback);
->>>>>>> Stashed changes
 }
       
 function activePitchDetection() {
         pitchDetector.startLiveInput();
-        display();
+        setAudioControl();
+        display()
 };
 
+function setAudioControl(){
+		
+    // monkeypatch Web Audio
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+	
+    // grab an audio context
+    audioContext = new AudioContext();
+}
+
+
+
+function gotStream(stream) {
+    // Create an AudioNode from the stream.
+    mediaStreamSource = audioContext.createMediaStreamSource(stream);
+
+    // Create a new volume meter and connect it.
+    meter = createAudioMeter(audioContext);
+    mediaStreamSource.connect(meter);
+
+    // kick off the visual updating
+    display();
+}
+
 function display() {
-          if (pitchDetector.pitch) {            
-            displayPitch(pitchDetector.pitch , pitchDetector.noteString);
+          if (pitchDetector.pitch) {
+          	
+          	// check if yhe volume is high enought
+		    if (meter.checkClipping()){
+		    	 displayPitch(pitchDetector.pitch , pitchDetector.noteString);
+		    }
+		   else{
+		    	//console.log("volum not hight enought")
+		    } 
           }
           flash(display);
 };
 
-<<<<<<< Updated upstream
-  return function() {
-    // console.log(pitch)
-
-
-    if(pitch!=11025){
-
-            // console.log(pitch)
-                  // console.log(note)
-=======
 
 function displayPitch(pitch, note) {
->>>>>>> Stashed changes
 
   		pitch=Number(pitch);
 
@@ -159,31 +106,6 @@ function displayPitch(pitch, note) {
   			//Group A7
   			section=7;
   		}
-<<<<<<< Updated upstream
-
-
-
-      // console.log("note - section:", note, section)
-
-      renderView(note, section)
-
-  	} else {
-  	  //  $("#Layer_1 rect").css("fill","#FFFFFF");
-  	  //   $("#Layer_2 rect").css("fill","#000000");
-    }
-  }
-
-}
-
-
-// window.time = 100
-// window.time = 120
-window.time = 30
-
-var tick_throttle = _.throttle(function(pitch, note){
-  tick(pitch, note)()
-}, window.time)
-=======
   		
 
 		$("#Layer_1 rect").css("fill","#FFFFFF");
@@ -209,7 +131,6 @@ var firstSectionValuesCollection=new Array();
 var locked=false;
 var timer;
 var count=0;
->>>>>>> Stashed changes
 
 function timerCleaner(){
 	if(locked==false){

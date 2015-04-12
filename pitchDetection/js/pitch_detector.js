@@ -88,13 +88,25 @@
   }
 
   Detector.prototype.startLiveInput = function () {
-    getUserMedia({audio: true}, this.gotStream.bind(this));
+    getUserMedia( {
+            "audio": {
+                "mandatory": {
+                    "googEchoCancellation": "false",
+                    "googAutoGainControl": "false",
+                    "googNoiseSuppression": "false",
+                    "googHighpassFilter": "false"
+                },
+                "optional": []
+            },
+        }, this.gotStream.bind(this));
   };
 
   Detector.prototype.gotStream = function (stream) {
     // Create an AudioNode from the stream.
     this.audioStream = stream;
     var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+    
+    gotStream(stream)
 
     // Connect it to the destination.
     this.analyser = audioContext.createAnalyser();
