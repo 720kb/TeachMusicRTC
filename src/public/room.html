@@ -59,7 +59,21 @@
     <script type="text/javascript" src="vendor/js/adapter.js"></script>
     <script type="text/javascript" src="vendor/dist/jquery.js"></script>
     <script type="text/javascript" src="vendor/bin/materialize.js"></script>
+    <script type="text/javascript" src="vendor/js/underscore.js"></script>
     <script type="text/javascript" src="vendor/client.js"></script>
     <script type="text/javascript" src="assets/js/index.js"></script>
+
+    <script type="text/javascript">
+      window.NODE_ENV = "{{ process.env.NODE_ENV }}";
+    </script>
+    <script type="text/x-template" >
+      // type="text/x-handlebars"
+      //
+      // \{{ #if process.env.DEBUG }}
+      // <p>env: </p>
+      // <node_env>\{{ process.env.NODE_ENV }}</node_env>
+      // <p>peers:</p>
+      // \{{ /if }}
+    </script>
   </body>
 </html>

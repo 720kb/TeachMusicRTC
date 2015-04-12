@@ -1,4 +1,8 @@
-/* global window */
+/* global window document console _ */
+
+console.log('init underscore (remove me)', _);
+
+window.time = 100;
 
 (function windowMess(window) {
   'use strict';
@@ -16,7 +20,7 @@
     , ROOM_URL_ID = Number(window.location.hash.replace('#', ''))
     , ROOM_URL = BASE_URL + '/room.html#' + ROOM_URL_ID
     , ROOM_ROUTE = 'room.html'
-    , WS_URL = 'ws://localhost:9876'
+    , WS_URL = 'ws://teachrtc.mkvd.net:9876'
     , userdataReadyEvent = new window.CustomEvent('userdata:ready')
     , section
     , log = function log() {
@@ -32,8 +36,27 @@
         window.sessionStorage.roomID = ROOM_URL_ID;
         if (ROOM_URL_ID === Number(window.sessionStorage.myRoomID)) {
 
+          // can be set to 1 for production env
+          //
+          // if (window.NODE_ENV === "development") {
+
+          if (document.querySelector('video')) {
+            document.querySelector('video').volume = 0;
+          }
+
+          // }
+
           window.sessionStorage.userType = 'teacher';
         } else {
+
+
+          // if (window.NODE_ENV === "development") {
+
+          // if (document.querySelector('video')) {
+          //   document.querySelector('video').volume = 0;
+          // }
+
+          // }
 
           window.sessionStorage.userType = 'student';
         }
@@ -71,24 +94,38 @@
         var noteNum = 12 * (Math.log(frequency / 440 ) / Math.log(2));
         return Math.round( noteNum ) + 69;
       }
+
     , drawNote = function drawNote(sectionNum, note) {
 
+      console.log('section', sectionNum, 'note', note);
+
+
       //To check that doesn't exist #
-      if (note.indexOf('#') === -1) {
+      if (section === 4) {
 
-        window.$('#Layer_1 rect').css('fill', '#FFFFFF');
-        window.$('#Layer_2 rect').css('fill', '#000000');
-        window.$('#Layer_1 #range' + sectionNum + ' #' + note).css('fill', '#FF0000');
-      } else {
+        if (note.indexOf('#') === -1) {
+          console.log('#Layer_1 #range' + sectionNum + ' #' + note);
 
-        note = note.replace(/[^a-zA-Z0-9]/g, '');
-        window.$('#Layer_1 rect').css('fill', '#FFFFFF');
-        window.$('#Layer_2 rect').css('fill', '#000000');
-        window.$('#Layer_2 #range' + sectionNum + ' #' + note).css('fill', '#00FF00');
+          window.$('#Layer_1 rect').css('fill', '#FFFFFF');
+          window.$('#Layer_2 rect').css('fill', '#000000');
+          window.$('#Layer_1 #range' + sectionNum + ' #' + note).css('fill', '#FF0000');
+        } else {
+
+          note = note.replace(/[^a-zA-Z0-9]/g, '');
+
+          console.log('#Layer_1 #range' + sectionNum + ' #' + note);
+
+
+          window.$('#Layer_1 rect').css('fill', '#FFFFFF');
+          window.$('#Layer_2 rect').css('fill', '#000000');
+          window.$('#Layer_2 #range' + sectionNum + ' #' + note).css('fill', '#00FF00');
+        }
+
       }
     }
-    , displayButton = function displayButton(pitch, note) {
 
+    , tick = function tick(pitch, note) {
+      return function() {
         if (pitch !== '-') {
 
           pitch = Number(pitch).toFixed(3);
@@ -160,7 +197,11 @@
             }
           }
         }
-      }
+      };
+    }
+    , tickThrottle = _.throttle(function(pitch, note){
+      tick(pitch, note)();
+    }, window.time)
     /* eslint-disable */
     , autoCorrelate = function autoCorrelate( buf, sampleRate ) {
         var SIZE = buf.length;
@@ -226,12 +267,12 @@
         if (ac === -1) {
 
           //Added
-          displayButton('-', '-');
+          tickThrottle('-', '-');
         } else {
 
           pitch = ac;
           note = noteFromPitch(pitch);
-          displayButton(pitch, noteStrings[note % 12]);
+          tickThrottle(pitch, noteStrings[note % 12]);
         }
 
         if (!window.requestAnimationFrame) {
