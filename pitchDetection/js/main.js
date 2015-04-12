@@ -84,32 +84,32 @@ function displayPitch(pitch, note) {
   			//Group A1
   			section=1;
   		}
-  		if(pitch>=55.000 && pitch<110.000){
+  		if(pitch>=55.000 && pitch<110.00){
   			//Group A2
   			section=2;
   		}
 
-  		if(pitch>=110.000 && pitch<220.000){
+  		if(pitch>=110.00 && pitch<220.00){
   			//Group A3
   			section=3;
   		}
 
-  		if(pitch>=220.000 && pitch<440.000){
+  		if(pitch>=220.00 && pitch<440.00){
   			//Group A4 // (LA)
   			section=4;
   		}
 
-  		if(pitch>=440.000 && pitch<880.000){
+  		if(pitch>=440.00 && pitch<880.00){
   			//Group A5
   			section=5;
   		}
 
-  		if(pitch>=880.000 && pitch<1760.000){
+  		if(pitch>=880.00 && pitch<1760.0){
   			//Group A6
   			section=6;
   		}
 
-  		if(pitch>=1760.000 && pitch<3520.000){
+  		if(pitch>=1760.0 && pitch<3520.0){
   			//Group A7
   			section=7;
   		}
