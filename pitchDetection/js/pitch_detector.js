@@ -138,7 +138,7 @@
 		waveCanvas.strokeStyle = "black";
 		waveCanvas.beginPath();
 		waveCanvas.moveTo(0,this.buf[0]);
-		console.log(this.buf[0])
+		
 		for (var i=1;i<512;i++) {
 			waveCanvas.lineTo(i,128+(this.buf[i]*128));
 		}
