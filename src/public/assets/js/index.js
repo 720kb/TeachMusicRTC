@@ -2,7 +2,7 @@
 
 console.log('init underscore (remove me)', _);
 
-window.time = 100;
+window.time = 120;
 
 (function windowMess(window) {
   'use strict';
@@ -20,7 +20,7 @@ window.time = 100;
     , ROOM_URL_ID = Number(window.location.hash.replace('#', ''))
     , ROOM_URL = BASE_URL + '/room.html#' + ROOM_URL_ID
     , ROOM_ROUTE = 'room.html'
-    , WS_URL = 'ws://teachrtc.mkvd.net:9876'
+    , WS_URL = 'ws://localhost:9876'
     , userdataReadyEvent = new window.CustomEvent('userdata:ready')
     , section
     , log = function log() {
@@ -52,9 +52,9 @@ window.time = 100;
 
           // if (window.NODE_ENV === "development") {
 
-          // if (document.querySelector('video')) {
-          //   document.querySelector('video').volume = 0;
-          // }
+          if (document.querySelector('video')) {
+            document.querySelector('video').volume = 0;
+          }
 
           // }
 
@@ -101,17 +101,20 @@ window.time = 100;
 
 
       //To check that doesn't exist #
-      if (section === 4) {
+      // if (section === 4) {
+      if (true) {
 
-        if (note.indexOf('#') === -1) {
+        if (note.indexOf('#') === -1) { // tasti bianchi
           console.log('#Layer_1 #range' + sectionNum + ' #' + note);
 
           window.$('#Layer_1 rect').css('fill', '#FFFFFF');
           window.$('#Layer_2 rect').css('fill', '#000000');
           window.$('#Layer_1 #range' + sectionNum + ' #' + note).css('fill', '#FF0000');
-        } else {
+        } else { // tasti neri
 
+          /* eslint-disable */
           note = note.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
+          /* eslint-enable */
 
           console.log('#Layer_1 #range' + sectionNum + ' #' + note);
 
@@ -272,7 +275,11 @@ window.time = 100;
 
           pitch = ac;
           note = noteFromPitch(pitch);
-          tickThrottle(pitch, noteStrings[note % 12]);
+
+          if (pitch >= 220.000 && pitch < 440.000) {
+          // if (section === 4) {
+            tickThrottle(pitch, noteStrings[note % 12]);
+          }
         }
 
         if (!window.requestAnimationFrame) {
