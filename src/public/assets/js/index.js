@@ -52,9 +52,9 @@ window.time = 120;
 
           // if (window.NODE_ENV === "development") {
 
-          if (document.querySelector('video')) {
-            document.querySelector('video').volume = 0;
-          }
+          // if (document.querySelector('video')) {
+          //   document.querySelector('video').volume = 0;
+          // }
 
           // }
 
