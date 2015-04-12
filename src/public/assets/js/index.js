@@ -111,7 +111,7 @@ window.time = 100;
           window.$('#Layer_1 #range' + sectionNum + ' #' + note).css('fill', '#FF0000');
         } else {
 
-          note = note.replace(/[^a-zA-Z0-9]/g, '');
+          note = note.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
 
           console.log('#Layer_1 #range' + sectionNum + ' #' + note);
 
@@ -286,7 +286,7 @@ window.time = 100;
   // Events
   window.addEventListener('stream:someone-arrived', function onSomeOneArrived() {
 
-    window.$('#waitingPopup').fadeOut(0);
+    window.$('#waitingPopup, #invitePopup, #sharer').fadeOut(500);
   });
 
   window.addEventListener('stream:data-arrived', function onDataArrived(event) {
@@ -323,7 +323,7 @@ window.time = 100;
       window.attachMediaStream(videoElement, event.detail.mediaElement);
       videoElement.id = event.detail.userid;
       videoElement.play();
-      window.$('#waitingPopup').fadeOut(0);
+      window.$('#waitingPopup').fadeOut(500);
 
       //register on
     } else {

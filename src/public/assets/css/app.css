@@ -79,3 +79,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#afafaf', end
   width:100%;
   min-height: 100px;
 }
+.github-buttons iframe{
+  float:right;
+  width:100px;
+  display: inline-block;
+}

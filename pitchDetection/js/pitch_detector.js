@@ -120,7 +120,7 @@
     this.analyser.getByteTimeDomainData(this.buf);
     var ac = autoCorrelate(this.buf, audioContext.sampleRate);
     
-    if (DEBUGCANVAS) {  // This draws the current waveform, useful for debugging
+    /*if (DEBUGCANVAS) {  // This draws the current waveform, useful for debugging
 		waveCanvas.clearRect(0,0,512,256);
 		waveCanvas.strokeStyle = "red";
 		waveCanvas.beginPath();
@@ -143,7 +143,7 @@
 			waveCanvas.lineTo(i,128+(this.buf[i]*128));
 		}
 		waveCanvas.stroke();
-	}
+	}*/
     
     
     if (ac !== -1) {

@@ -1,72 +1,66 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Room</title>
-    <link rel="stylesheet" type="text/css" href="vendor/bin/materialize.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css">
-  </head>
-  <body class="grey">
-    <div class="row">
-      <video id="video" src="" autoplay class="video black"></video>
-      <div class="row white-text">
-        <div class="top top10"></div>
-        <div class="col s12">
-          <button id="sharer" class="btn btn-floating blue white-text">
-            <i class="mdi-action-accessibility"></i>
-          </button>
-          Invite someone
-        </div>
-        <div class="row">
-          <div class="top top100"></div>
-          <div class="top top100"></div>
-          <div id="invitePopup" class="popup hide">
-            <h5 class="white-text">COPY & PASTE</h5>
-            <div>Share this url to invite someone</div>
-            <div class="top top10"></div>
-            <div class="row">
-              <span class="toast white black-text centered ellips" contenteditable readonly>
-                <span class="url-share-holder"><!--here is printed url to invite--></span>
-              </span>
-            </div>
-            <div>
-              <a class="float right" id="closePopup" href="javascript:void(0)">
-                OK
-              </a>
-            </div>
-            <div class="top top10"></div>
-            <div class="top top10"></div>
-          </div>
-          <!--waiting for someone holder-->
-          <div class="top top10"></div>
-          <div id="waitingPopup" class="popup center-align hide">
-            Waiting for the student to connect...
-            <div class="progress blue">
-              <div class="indeterminate blue darken-2"></div>
-            </div>
-          </div>
-        </div>
+<head>
+  <title>Room</title>
+  <link rel="stylesheet" type="text/css" href="vendor/bin/materialize.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/app.css">
+</head>
+<body class="grey">
+  <div class="row">
+    <video id="video" src="" autoplay class="video black"></video>
+    <div class="row white-text">
+      <div class="top top10"></div>
+      <div class="col s12">
+        <button id="sharer" class="btn btn-floating blue white-text">
+          <i class="mdi-action-accessibility"></i>
+        </button>
       </div>
-      <div class="col s12 white video-pitch black-text">
-        <p>
-          <button class="btn blue white-text btn-floating btn-large float right">
-            <i class="mdi-av-play-arrow"></i>
-          </button>
-        </p>
-        <div id="piano">
+      <div class="row">
+        <div class="top top100"></div>
+        <div class="top top100"></div>
+        <div id="invitePopup" class="popup hide">
+          <h5 class="white-text">COPY & PASTE</h5>
+          <div>Share this url to invite someone</div>
+          <div class="top top10"></div>
+          <div class="row">
+            <span class="toast white black-text centered ellips" contenteditable readonly>
+              <span class="url-share-holder"><!--here is printed url to invite--></span>
+            </span>
+          </div>
+          <div>
+            <a class="float right" id="closePopup" href="javascript:void(0)">
+              OK
+            </a>
+          </div>
+          <div class="top top10"></div>
+          <div class="top top10"></div>
+        </div>
+        <!--waiting for someone holder-->
+        <div class="top top10"></div>
+        <div id="waitingPopup" class="popup center-align hide">
+          Waiting for the student to connect...
+          <div class="progress blue">
+            <div class="indeterminate blue darken-2"></div>
+          </div>
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="vendor/js/adapter.js"></script>
-    <script type="text/javascript" src="vendor/dist/jquery.js"></script>
-    <script type="text/javascript" src="vendor/bin/materialize.js"></script>
-    <script type="text/javascript" src="vendor/js/underscore.js"></script>
-    <script type="text/javascript" src="vendor/client.js"></script>
-    <script type="text/javascript" src="assets/js/index.js"></script>
+    <div class="col s12 white video-pitch black-text">
+      <div id="piano">
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="vendor/js/adapter.js"></script>
+  <script type="text/javascript" src="vendor/dist/jquery.js"></script>
+  <script type="text/javascript" src="vendor/bin/materialize.js"></script>
+  <script type="text/javascript" src="vendor/js/underscore.js"></script>
+  <script type="text/javascript" src="vendor/client.js"></script>
+  <script type="text/javascript" src="assets/js/index.js"></script>
 
-    <script type="text/javascript">
-      window.NODE_ENV = "{{ process.env.NODE_ENV }}";
-    </script>
-    <script type="text/x-template" >
+  <script type="text/javascript">
+    window.NODE_ENV = "{{ process.env.NODE_ENV }}";
+  </script>
+  <script type="text/x-template" >
       // type="text/x-handlebars"
       //
       // \{{ #if process.env.DEBUG }}
@@ -76,4 +70,4 @@
       // \{{ /if }}
     </script>
   </body>
-</html>
+  </html>

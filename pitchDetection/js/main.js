@@ -11,12 +11,12 @@ $( document ).ready(function() {
 	  activePitchDetection();
 	});
 	
-	DEBUGCANVAS = document.getElementById( "waveform" );
+	/*DEBUGCANVAS = document.getElementById( "waveform" );
 	if (DEBUGCANVAS) {
 		waveCanvas = DEBUGCANVAS.getContext("2d");
 		waveCanvas.strokeStyle = "black";
 		waveCanvas.lineWidth = 1;
-	}
+	}*/
 });
 
 
