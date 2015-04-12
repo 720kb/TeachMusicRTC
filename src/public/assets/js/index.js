@@ -102,7 +102,7 @@ window.time = 120;
 
       //To check that doesn't exist #
       // if (section === 4) {
-      if (true) {
+      // if (true) {
 
         if (note.indexOf('#') === -1) { // tasti bianchi
           console.log('#Layer_1 #range' + sectionNum + ' #' + note);
@@ -124,7 +124,7 @@ window.time = 120;
           window.$('#Layer_2 #range' + sectionNum + ' #' + note).css('fill', '#00FF00');
         }
 
-      }
+      // }
     }
 
     , tick = function tick(pitch, note) {
