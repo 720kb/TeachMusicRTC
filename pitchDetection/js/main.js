@@ -10,6 +10,13 @@ $( document ).ready(function() {
    $( "#activePitch").off("click").on( "click", function() {
 	  activePitchDetection();
 	});
+	
+	DEBUGCANVAS = document.getElementById( "waveform" );
+	if (DEBUGCANVAS) {
+		waveCanvas = DEBUGCANVAS.getContext("2d");
+		waveCanvas.strokeStyle = "black";
+		waveCanvas.lineWidth = 1;
+	}
 });
 
 
