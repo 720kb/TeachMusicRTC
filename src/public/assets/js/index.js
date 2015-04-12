@@ -111,7 +111,7 @@ window.time = 100;
           window.$('#Layer_1 #range' + sectionNum + ' #' + note).css('fill', '#FF0000');
         } else {
 
-          note = note.replace(/[^a-zA-Z0-9]/g, '');
+          note = note.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'');
 
           console.log('#Layer_1 #range' + sectionNum + ' #' + note);
 
