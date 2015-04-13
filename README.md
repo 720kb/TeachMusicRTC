@@ -37,3 +37,23 @@ Start
 - Filippo Aiello
 - Francesco Canessa
 - Filippo Oretti
+
+
+### Photos / Links
+
+Blog post: http://blog.tadhack.com/2015/04/12/tadhack-mini-london-winners/
+
+
+presentation:
+
+![](http://mkvphoto.s3.amazonaws.com/open_source/presentation_tadhack.jpg)
+
+Randy Resnick jamming on it (was so awesome!):
+
+![](http://mkvphoto.s3.amazonaws.com/open_source/presentation_tadhack2.jpg)
+
+making of:
+
+![](http://mkvphoto.s3.amazonaws.com/open_source/presentation_tadhack3.jpg)
+
+Thanks to TADHack-mini London organizers and all the sponsors, it was a really cool event!
