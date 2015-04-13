@@ -56,4 +56,4 @@ making of:
 
 ![](http://mkvphoto.s3.amazonaws.com/open_source/presentation_tadhack3.jpg)
 
-Thanks to TADHack-mini London organizers and all the sponsors, it was a really cool event!
+Thanks to TADHack-mini London organizers and all the sponsors, the event was super-cool!
