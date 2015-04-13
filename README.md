@@ -31,6 +31,14 @@ Start
 ---
 `npm start`
 
+### Main libraries used:
+
+- siglr - https://www.npmjs.com/package/siglr
+- pitchdetect.js - https://github.com/cwilso/pitchdetect
+- hapi
+- materialize-css
+- underscore
+
 ### Team
 
 - Dario Andrei
