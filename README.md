@@ -56,9 +56,8 @@ presentation:
 
 ![](http://mkvphoto.s3.amazonaws.com/open_source/presentation_tadhack.jpg)
 
-Randy Resnick jamming on it (was so awesome!):
+Randy Resnick jamming on it (was so awesome!): https://twitter.com/FilippoAiello/status/587374854992715776
 
-![](http://mkvphoto.s3.amazonaws.com/open_source/presentation_tadhack2.jpg)
 
 making of:
 
